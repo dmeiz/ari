@@ -19,9 +19,9 @@ require 'ari'
 task :default => 'spec:run'
 
 PROJ.name = 'ari'
-PROJ.authors = 'FIXME (who is writing this software)'
-PROJ.email = 'FIXME (your e-mail)'
-PROJ.url = 'FIXME (project homepage)'
+PROJ.authors = 'Dan Hensgen'
+PROJ.email = 'dan@methodhead.com'
+PROJ.url = 'http://blog.methodhead.com'
 PROJ.version = Ari::VERSION
 PROJ.rubyforge.name = 'ari'
 
