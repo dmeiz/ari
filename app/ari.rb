@@ -3,8 +3,8 @@ require 'rubygems'
 require 'sinatra'
 
 RAILS_ENV.replace("development") if defined?(RAILS_ENV)
-require 'config/boot'
-require RAILS_ROOT + '/config/environment'
+require ENV['RAILS_ROOT'] + '/config/boot'
+require ENV['RAILS_ROOT'] + '/config/environment'
 
 class ActiveRecord::Base
   class << self
@@ -23,7 +23,7 @@ end
 # Returns an array of class names for all subclasses of ActiveRecord::Base
 # found in app/models.
 def active_record_classes
-  Dir.glob("app/models/**/*.rb").each do |f|
+  Dir.glob(ENV['RAILS_ROOT'] + "/app/models/**/*.rb").each do |f|
     require f
   end
 end
