@@ -1,0 +1,33 @@
+%table{:width => "100%"}
+  %tr
+    %td{:width => "50%"}
+      %table{:width => "100%"}
+        - @obj.class.reflections.each do |ref|
+          %tr
+            %th= ref[1].macro
+            %td{:id => ref[0]}
+              - case ref[1].macro
+                - when :belongs_to
+                  - if assoc = @obj.send(ref[0])
+                    %a{:class => "object-link", :href => "/show/#{assoc.class.to_s}/#{assoc.id}"}&= assoc
+                  - else
+                    %b=ref[0]
+                - when :has_many
+                  %a{:class => "object-link", :href => "/list/#{@obj.class}/#{@obj.id}/#{ref[0]}"}= "#{@obj.send(ref[0]).count} #{ref[0]}"
+                - else
+                  %b=ref[0]
+    %td{:width => "50%"}
+      %table{:width => "100%"}
+        - @obj.class.columns.each do |column|
+          %tr
+            %th{:width => "25%"}
+              = column.name
+            %td
+              - case column.type
+                - when :datetime
+                  = @obj.send(column.name).to_s(:db)
+                - else
+                  = @obj.send(column.name)
+:javascript
+  $('#status').html('Objects Name Goes Here');
+  ajax_links();

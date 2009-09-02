@@ -1,0 +1,11 @@
+%table{:width => "100%"}
+  %tr
+    - @klass.explorer_columns.each do |col|
+      %th= col
+  - @objs.each do |obj|
+    %tr
+      - @cols.each do |col|
+        %td
+          %a{:class => "object-link", :href => "/show/#{obj.class}/#{obj.id}"}= obj.send(col)
+:javascript
+  ajax_links();
