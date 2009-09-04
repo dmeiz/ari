@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Consolidate associations and attributes into one list
+desc: ""
+type: :task
+component: ae
+release: 
+reporter: Dan Hensgen <dan@methodhead.com>
+status: :unstarted
+disposition: 
+creation_time: 2009-08-25 02:42:44.548728 Z
+references: []
+
+id: 0e747c8a4d70162150aa9a2af4e80b3b3325e85a
+log_events: 
+- - 2009-08-25 02:42:45.660709 Z
+  - Dan Hensgen <dan@methodhead.com>
+  - created
+  - ""
