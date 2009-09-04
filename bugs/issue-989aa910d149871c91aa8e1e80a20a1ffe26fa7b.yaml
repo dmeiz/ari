@@ -5,8 +5,8 @@ type: :task
 component: ae
 release: 
 reporter: Dan Hensgen <dan@methodhead.com>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2009-08-24 19:49:35.395635 Z
 references: []
 
@@ -15,4 +15,8 @@ log_events:
 - - 2009-08-24 19:49:36.067133 Z
   - Dan Hensgen <dan@methodhead.com>
   - created
+  - ""
+- - 2009-09-04 20:41:40.758982 Z
+  - Dan Hensgen <dan@methodhead.com>
+  - closed with disposition fixed
   - ""
