@@ -1,3 +1,9 @@
+require 'rubygems'
+require 'activerecord'
+
+class Class
+  attr_accessor :display_atts
+end
 
 module Ari
 
@@ -42,8 +48,35 @@ module Ari
     Dir.glob(search_me).sort.each {|rb| require rb}
   end
 
+  # Returns the class for +name+ or nil.
+  def get_class(name)
+    begin
+      return eval(name)
+    rescue NameError;
+    end
+    nil
+  end
+
+  # Loads class attribute names from +path+ or
+  # ENV["RAILS_ROOT"]/config/ari.yaml if it exists.
+  def load_display_atts(path = nil)
+    ActiveRecord::Base.display_atts = ["name", "description"]
+
+    path = File.join(ENV["RAILS_ROOT"], "config", "explorer.yaml") unless path
+
+    return unless File.exists?(path)
+
+    yaml = File.open(path) { |f| YAML::load(f) }
+    yaml.each do |klass, atts|
+      next unless klass = get_class(klass)
+      klass.display_atts = atts
+    end
+  end
+
 end  # module Ari
 
 Ari.require_all_libs_relative_to(__FILE__)
+
+
 
 # EOF
