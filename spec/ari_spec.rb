@@ -35,6 +35,7 @@ END
   end
 
   it "should load display atts from RAILS_ROOT" do
+    FileUtils.mkdir "spec/config"
     file = File.open("spec/config/ari.yaml", "w") do |f|
       f << <<END
 Car:
@@ -47,7 +48,7 @@ END
     load_display_atts
     Car.display_atts.should == ["model", "desc"]
 
-    File.delete("spec/config/ari.yaml")
+    FileUtils.rm_r("spec/config")
   end
 end
 
