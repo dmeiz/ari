@@ -3,8 +3,6 @@ require 'rubygems'
 require 'sinatra'
 
 RAILS_ENV.replace("development") if defined?(RAILS_ENV)
-require ENV['RAILS_ROOT'] + '/config/boot'
-require ENV['RAILS_ROOT'] + '/config/environment'
 
 class ActiveRecord::Base
   class << self
