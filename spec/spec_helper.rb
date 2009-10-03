@@ -1,14 +1,6 @@
 require 'tempfile'
-require 'webrat'
-require 'webrat/sinatra'
-require File.expand_path(File.join(File.dirname(__FILE__), %w[.. lib ari]))
-
-include Webrat::Methods
-include Webrat::Matchers
-
-Webrat.configure do |config|
-  config.mode = :rack
-end
+require 'activerecord'
+require 'rack/test'
 
 ActiveRecord::Base.establish_connection(
   :adapter  => "mysql",
@@ -29,6 +21,7 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
 end
 
+
 # Opens a new temp file, writes +text+ to it and returns the file's path.
 def temp_file(text)
   file = Tempfile.new("ari")
@@ -36,6 +29,8 @@ def temp_file(text)
   file.close
   file.path
 end
+
+class Car < ActiveRecord::Base; end
 
 # Initializes the test database.
 def init_schema
@@ -50,6 +45,13 @@ def init_schema
       t.column :name, :string
     end
   end
+
+  Car.create!(
+    :brand => "Mazda",
+    :model => "Protege"
+  )
 end
+
+
 
 # EOF

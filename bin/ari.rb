@@ -83,8 +83,7 @@ get '/' do
 end
 
 get '/show/:class/:id' do
-  klass = eval(params[:class])
-  @obj = klass.find(params[:id])
+  @obj = get_class(params[:class]).find(params[:id])
   haml :show, :layout => false
 end
 

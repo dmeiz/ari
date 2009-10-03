@@ -44,7 +44,6 @@ Car:
 END
     end
 
-
     load_display_atts
     Car.display_atts.should == ["model", "desc"]
 
@@ -59,6 +58,11 @@ describe "get_class" do
 
   it "should return nil for an invalid class" do
     get_class("Invalid").should == nil
+  end
+end
+
+describe "/show" do
+  it "should show an object" do
   end
 end
 
