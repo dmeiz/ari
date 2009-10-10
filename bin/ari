@@ -12,7 +12,7 @@ configure do
   Ari.boot_active_record
   Ari.load_display_atts
 
- # set :root, "/opt/local/lib/ruby/gems/1.8/gems/ari-1.0.0"
+  set :root, File.join(File.dirname(__FILE__), ".." )
   set :run, true
 end
 

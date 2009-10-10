@@ -1,0 +1,9 @@
+mazda:
+  id: 1
+  brand: Mazda
+  model: Protege
+
+honda:
+  id: 2
+  brand: Honda
+  model: Accord
