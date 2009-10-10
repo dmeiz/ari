@@ -1,80 +1,18 @@
-$: << "app/models"
 require 'rubygems'
 require 'sinatra'
+require File.join(File.dirname(__FILE__), "..", "lib", "ari")
 
 RAILS_ENV.replace("development") if defined?(RAILS_ENV)
 
-class ActiveRecord::Base
-  class << self
-    alias old_inherited inherited 
-  end
-
-  def self.inherited(subclass)
-    Log.info("Found active record #{subclass}")
-    @@classes << subclass
-    old_inherited(subclass)
-  end
-end
-
-@@classes = []
-
-# Returns an array of class names for all subclasses of ActiveRecord::Base
-# found in app/models.
-def active_record_classes
-  Dir.glob(ENV['RAILS_ROOT'] + "/app/models/**/*.rb").each do |f|
-    require f
-  end
-end
 
 configure do
   Log = Logger.new("sinatra.log") # or log/development.log, whichever you prefer
   Log.level  = Logger::INFO
 
-  Log.info("Connecting to localhost")
-  ActiveRecord::Base.establish_connection(
-    :adapter  => "mysql",
-    :host     => "localhost",
-    :username => "root",
-    :password => "",
-    :database => "riderway_development"
-  )
+  Ari.boot_active_record
+  Ari.load_ari_members
 
-  Log.info("Loading active record classes")
-  #active_record_classes()
-
-  class ActiveRecord::Base
-    def self.explorer_columns
-      @@explorer_columns || ["key_name", "name", "title", "description", "desc"]     
-
-      cols = klass.columns.select do |col|
-        if klass.explorer_columns.include?(col.name) && [:text, :string].include?(col.type)
-          next col.name
-        end
-        false
-      end
-
-      cols.collect {|col| col.name}
-    end
-
-    def explorer_columns
-      self.class.explorer_columns
-    end
-  end
-
-  ["config/explorer.yaml"].each do |path|
-    if File.exists?(path)
-      Log.info("Loading column info from #{path}")
-      yaml = File.open('config/explorer.yaml') { |f| YAML::load(f) }
-      yaml.each do |klass, columns|
-        klass = eval(klass)
-        klass.class_eval do
-          @@explorer_columns = columns
-        end
-      end
-    end
-  end
-
-  set :root, "/opt/local/lib/ruby/gems/1.8/gems/ari-1.0.0"
+ # set :root, "/opt/local/lib/ruby/gems/1.8/gems/ari-1.0.0"
   set :run, true
 end
 
