@@ -10,7 +10,7 @@ configure do
   Log.level  = Logger::INFO
 
   Ari.boot_active_record
-  Ari.load_ari_members
+  Ari.load_display_atts
 
  # set :root, "/opt/local/lib/ruby/gems/1.8/gems/ari-1.0.0"
   set :run, true
@@ -21,7 +21,7 @@ get '/' do
 end
 
 get '/show/:class/:id' do
-  @obj = get_class(params[:class]).find(params[:id])
+  @obj = Ari.get_class(params[:class]).find(params[:id])
   haml :show, :layout => false
 end
 
