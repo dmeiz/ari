@@ -6,8 +6,8 @@
     %script{:src => "/ari.js", :type => "text/javascript"}
   %body
     #search
-      %form{:id => "search", :name => "search"}
-        %input{:id => "q", :name => "q", :type => "text", :autocomplete => "off"}
+      %form#search_form{:name => "search"}
+        %input#q{:name => "q", :type => "text", :autocomplete => "off"}
     #status This is status
     #main
       = yield

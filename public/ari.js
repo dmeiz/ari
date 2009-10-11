@@ -2,7 +2,7 @@ $(document).ready(function () {
   klass = "";
   pat = "";
 
-  $('#search').bind('submit', function() {
+  $('#search_form').bind('submit', function() {
     $('#main').load('/search', 'q=' + klass + ' ' + pat);
     return false;
   });

@@ -43,8 +43,7 @@ get '/list/:class/:id/:assoc' do
 end
 
 get '/classes' do
-  #"['" + @@classes.join("', '") + "']"
-  "['Provider', 'Zone']"
+  "['" + ActiveRecord::Base.available_classes.join("', '") + "']"
 end
 
 def where_clause(search_columns, q)
