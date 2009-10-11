@@ -5,6 +5,10 @@ class Class
   attr_accessor :display_atts, :available_classes
 end
 
+class ActiveRecord::ConnectionAdapters::AbstractAdapter
+  attr_accessor :config
+end
+
 class ActiveRecord::Base
   self.available_classes = []
 

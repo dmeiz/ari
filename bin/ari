@@ -17,6 +17,7 @@ configure do
 end
 
 get '/' do
+  @database_config = ActiveRecord::Base.connection.config
   haml :index
 end
 

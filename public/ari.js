@@ -35,3 +35,7 @@ function ajax_links() {
     return false;
   });
 }
+
+function set_status(html) {
+  $('#status').html(html);
+}
