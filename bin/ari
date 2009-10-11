@@ -27,10 +27,9 @@ get '/show/:class/:id' do
 end
 
 get '/search' do
-  klass_name, q = params[:q].split(/\s+/)
-  @klass = eval(klass_name)
-  cols = search_columns(@klass)
-  @objs = @klass.all(:conditions => [where_clause(cols, q)] + cols.collect {"%#{q}%"}, :order => cols.first)
+  class_name, q = params[:q].split(/\s+/)
+  @klass = Ari.get_class(class_name)
+  @objs = @klass.find_all_for_ari(q)
   haml :list, :layout => false
 end
 
@@ -44,24 +43,4 @@ end
 
 get '/classes' do
   "['" + ActiveRecord::Base.available_classes.join("', '") + "']"
-end
-
-def where_clause(search_columns, q)
-  clause = ""
-  search_columns.each_with_index do |col, i|
-    clause << " OR " unless i == 0
-    clause << "#{col} LIKE ?"
-  end
-  clause
-end
-
-def search_columns(klass)
-  cols = klass.columns.select do |col|
-    if klass.explorer_columns.include?(col.name) && [:text, :string].include?(col.type)
-      next col.name
-    end
-    false
-  end
-
-  cols.collect {|col| col.name}
 end

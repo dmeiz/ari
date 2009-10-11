@@ -32,6 +32,32 @@ class ActiveRecord::Base
     end
 
     cols.collect {|col| col.name}
+
+  end
+
+  def self.search_columns
+    cols = []
+
+    klass = self
+    while klass
+      cols << klass.display_atts
+      klass = klass.superclass
+    end
+
+    cols.flatten.uniq & self.column_names
+  end
+
+  def self.find_all_for_ari(q)
+    cols = search_columns
+
+    clause = ""
+    cols.each_with_index do |col, i|
+      clause << " OR " unless i == 0
+      clause << "#{col} LIKE ?"
+    end
+    clause
+
+    self.all(:conditions => [clause] + cols.collect {"%#{q}%"}, :order => cols.first)
   end
 
   def explorer_columns
