@@ -30,9 +30,17 @@ $(document).ready(function () {
 });
 
 function ajax_links() {
-  $('.object-link').click(function(el) {
-    $('#main').load(this.href)
-    return false;
+  $('a').click(function(ev) {
+    if (ev.target.className == "list") {
+      $.get(ev.target.href, function(data) {
+        $(ev.target).parent.html(data);
+      });
+    }
+    else {
+      $('#main').load(this.href)
+    }
+
+    ev.preventDefault();
   });
 }
 

@@ -28,16 +28,16 @@ end
 
 get '/search' do
   class_name, q = params[:q].split(/\s+/)
-  @klass = Ari.get_class(class_name)
-  @objs = @klass.find_all_for_ari(q)
+  @class = Ari.get_class(class_name)
+  @objs = @class.find_all_for_ari(q)
   haml :list, :layout => false
 end
 
 get '/list/:class/:id/:assoc' do
-  klass = eval(params[:class])
-  @obj = klass.find(params[:id])
+  @class = Ari.get_class(params[:class])
+  @obj = @class.find(params[:id])
   @objs = @obj.send(params[:assoc])
-  @cols = search_columns(klass)
+  @class = @objs.first.class
   haml :list, :layout => false
 end
 

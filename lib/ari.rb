@@ -21,19 +21,7 @@ class ActiveRecord::Base
     old_inherited(subclass)
   end
 
-  def self.explorer_columns
-    @@explorer_columns || ["key_name", "name", "title", "description", "desc"]     
-
-    cols = klass.columns.select do |col|
-      if klass.explorer_columns.include?(col.name) && [:text, :string].include?(col.type)
-        next col.name
-      end
-      false
-    end
-
-    cols.collect {|col| col.name}
-
-  end
+  self.display_atts = ["name"]
 
   def self.search_columns
     cols = []
@@ -60,8 +48,25 @@ class ActiveRecord::Base
     self.all(:conditions => [clause] + cols.collect {"%#{q}%"}, :order => cols.first)
   end
 
-  def explorer_columns
-    self.class.explorer_columns
+  Member = Struct.new(:name, :type, :value)
+
+  def members
+    members = []
+
+    attributes.each do |name, value|
+      members << Member.new(name, :attr, value)
+    end
+
+    self.class.reflections.each do |name, reflection|
+      case reflection.macro
+        when :has_many
+          members << Member.new(name, reflection.macro, self.send(name).send(:count))
+        else
+          members << Member.new(name, reflection.name, "foo")
+      end
+    end
+
+    members
   end
 end
 
