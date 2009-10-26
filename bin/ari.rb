@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'sass'
 require File.join(File.dirname(__FILE__), "..", "lib", "ari")
 
 RAILS_ENV.replace("development") if defined?(RAILS_ENV)
@@ -14,6 +15,11 @@ configure do
 
   set :root, File.join(File.dirname(__FILE__), ".." )
   set :run, true
+end
+
+get '/ari.css' do
+  content_type 'text/css', :charset => 'utf-8'
+  sass :ari
 end
 
 get '/' do
