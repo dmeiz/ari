@@ -11,7 +11,9 @@ $(document).ready(function () {
   $.get('/classes', null, function(data) {classes = data;}, 'json');
 
   $('#q').keyup(function(ev) {
-    [klass, pat] = $(this).val().split(/\s+/);
+    arr = $(this).val().split(/\s+/);
+    klass = arr[0];
+    pat = arr[1];
 
     if (!pat) pat = "";
     klass = klass.toLowerCase();
@@ -33,7 +35,8 @@ function ajax_links() {
   $('a').click(function(ev) {
     if (ev.target.className == "list") {
       $.get(ev.target.href, function(data) {
-        $(ev.target).parent.html(data);
+        $(data).appendTo(ev.target.parentNode);
+        $(ev.target).hide();
       });
     }
     else {
