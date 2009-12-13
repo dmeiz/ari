@@ -1,9 +1,26 @@
+function ajax_links() {
+  $('a').unbind().click(function(ev) {
+    if (ev.target.className == "list") {
+      $.get(ev.target.href, function(data) {  
+        $(data).appendTo(ev.target.parentNode);
+        $(ev.target).hide();
+        ajax_links();
+      });
+    }
+    else {
+      $('#main').load(this.href, ajax_links)
+    }
+
+    ev.preventDefault();
+  });
+}
+
 $(document).ready(function () {
   klass = "";
   pat = "";
 
   $('#search_form').bind('submit', function() {
-    $('#main').load('/search', 'q=' + klass + ' ' + pat);
+    $('#main').load('/search', 'q=' + klass + ' ' + pat, ajax_links);
     return false;
   });
 
@@ -31,21 +48,6 @@ $(document).ready(function () {
   });
 });
 
-function ajax_links() {
-  $('a').click(function(ev) {
-    if (ev.target.className == "list") {
-      $.get(ev.target.href, function(data) {
-        $(data).appendTo(ev.target.parentNode);
-        $(ev.target).hide();
-      });
-    }
-    else {
-      $('#main').load(this.href)
-    }
-
-    ev.preventDefault();
-  });
-}
 
 function set_status(html) {
   $('#status').html(html);

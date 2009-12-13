@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'activerecord'
+require 'active_record'
 
 class Class
   attr_accessor :display_atts, :available_classes
@@ -128,7 +128,7 @@ module Ari
     database_yaml_path = File.join(RAILS_ROOT, "config", "database.yml")
     raise "Couldn't find database.yml" unless File.exists?(database_yaml_path)
 
-    config = YAML.load_file(database_yaml_path)
+    config = YAML.load(ERB.new(File.read(database_yaml_path)).result(binding))
 
     ActiveRecord::Base.establish_connection(config[RAILS_ENV])
     Dir.glob(ENV['RAILS_ROOT'] + "/app/models/**/*.rb").each {|f| require f}

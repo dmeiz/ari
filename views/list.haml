@@ -6,8 +6,6 @@
   - @objs.each do |obj|
     %tr
       %td
-        %a{:class => "object-link", :href => "/show/#{@class.name}/#{obj.id}"}= obj.id
+        %a.show-link{:href => "/show/#{@class.name}/#{obj.id}"}= obj.id
       - @class.search_columns.each do |col|
         %td= obj.send(col)
-:javascript
-  ajax_links();

@@ -6,8 +6,9 @@
         - when :attr
           %td= member.value
         - when :has_many
-          %td 
+          %td{:style => "overflow: auto"}
             %a.list{:href => "/list/#{@obj.class}/#{@obj.id}/#{member.name}"}= "#{member.value} #{member.name}"
+%hr
 :javascript
   $('#status').html('Objects Name Goes Here');
   ajax_links();
