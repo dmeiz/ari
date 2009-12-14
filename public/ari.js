@@ -9,6 +9,7 @@ function ajax_links() {
     }
     else {
       $('#main').load(this.href, ajax_links)
+      $('#status').html('');
     }
 
     ev.preventDefault();

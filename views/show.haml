@@ -8,7 +8,9 @@
         - when :has_many
           %td{:style => "overflow: auto"}
             %a.list{:href => "/list/#{@obj.class}/#{@obj.id}/#{member.name}"}= "#{member.value} #{member.name}"
+        - when :belongs_to
+          %td
+            %a.show{:href => "/show/#{member.class}/#{member.id}"}= member.value
 %hr
 :javascript
-  $('#status').html('Objects Name Goes Here');
-  ajax_links();
+  $('#status').html('#{@obj.ari_name} <div id="class-name">#{@obj.class.name}</div>');

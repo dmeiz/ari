@@ -16,6 +16,7 @@ class ActiveRecord::Base
     alias old_inherited inherited 
   end
 
+  # Save the class name for searching later
   def self.inherited(subclass)
     ActiveRecord::Base.available_classes << subclass
     old_inherited(subclass)
@@ -23,6 +24,8 @@ class ActiveRecord::Base
 
   self.display_atts = ["name"]
 
+  # Returns an array of column names that can be safely used to search for
+  # instances of this class.
   def self.search_columns
     cols = []
 
@@ -35,6 +38,8 @@ class ActiveRecord::Base
     cols.flatten.uniq & self.column_names
   end
 
+  # Finds all instances that match q.  Matches q against all #search_columns
+  # for this class.
   def self.find_all_for_ari(q)
     cols = search_columns
 
@@ -48,8 +53,24 @@ class ActiveRecord::Base
     self.all(:conditions => [clause] + cols.collect {"%#{q}%"}, :order => cols.first)
   end
 
-  Member = Struct.new(:name, :type, :value)
+  # Returns a suitable name for this ActiveRecord instance, using the first
+  # column reported by #search_columns.
+  def ari_name
+    return self[self.class.search_columns[0]] unless self.class.search_columns.empty?
+    return self.id.to_s
+  end
 
+  # Defines metadata for a attribute or association.
+  Member = Struct.new(
+    :name,   # name of the member
+    :type,   # :attr, :has_many, or :belongs_to
+    :value,  # value to display for member when displaying details
+    :class,
+    :id
+  )
+
+  # Returns meta-data about all attributes and associations on this class.  A
+  # list of Members is returned.
   def members
     members = []
 
@@ -61,6 +82,9 @@ class ActiveRecord::Base
       case reflection.macro
         when :has_many
           members << Member.new(name, reflection.macro, self.send(name).send(:count))
+        when :belongs_to
+          member = self.send(name)
+          members << Member.new(name, reflection.macro, member.ari_name, member.class, member.id)
         else
           members << Member.new(name, reflection.name, "foo")
       end
