@@ -5,6 +5,19 @@ require File.join(File.dirname(__FILE__), "..", "lib", "ari")
 
 RAILS_ENV.replace("development") if defined?(RAILS_ENV)
 
+class Crack
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    response = @app.call(env)
+    ActiveRecord::Base.clear_active_connections!
+    response
+  end
+end
+
+use Crack
 
 configure do
   Log = Logger.new("sinatra.log") # or log/development.log, whichever you prefer
